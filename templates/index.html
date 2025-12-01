@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Car Price Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Car Price Prediction</h1>
+    <form method="POST">
+        {% for col in feature_columns %}
+            <div class="form-group">
+                <label>{{ col }}:</label>
+                {% if col in categorical_options %}
+                    <select name="{{ col }}" required>
+                        <option value="">Select {{ col }}</option>
+                        {% for display_name in categorical_options[col].keys() %}
+                            <option value="{{ display_name }}">{{ display_name }}</option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    <input type="number" name="{{ col }}" step="any" placeholder="{{ col }}" required>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit">Predict Price</button>
+    </form>
+
+    {% if predicted_price is not none %}
+        <h2>Predicted Car Price: {{ "{:,.2f}".format(predicted_price) }}</h2>
+    {% endif %}
+</div>
+</body>
+</html>
